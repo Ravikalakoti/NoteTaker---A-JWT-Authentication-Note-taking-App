@@ -34,7 +34,8 @@ Contributors:
 - Your Name (@Ravikalakoti)
 
 Thank you for your interest in contributing to our project!
-# Check Api Docs by http://localhost:8000/docs/
+# Check Api Docs
+http://localhost:8000/docs/
 
 # Key Features:
 1-User Registration and Login: Users can easily register an account with their email and password. The registration process is quick and straightforward, ensuring a hassle-free onboarding experience. Once registered, users can log in securely using their credentials.<br>
