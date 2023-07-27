@@ -1,6 +1,8 @@
 # NoteTaker A-JWT-Authentication-Note-taking-App
 NoteTaker is a web-based Note-taking application built using Django Rest Framework (DRF) with JSON Web Token (JWT) authentication. The application allows users to securely manage their personal notes while providing a seamless and authenticated experience
 
+# Check Api Docs by http://localhost:8000/docs/
+
 # Key Features:
 1-User Registration and Login: Users can easily register an account with their email and password. The registration process is quick and straightforward, ensuring a hassle-free onboarding experience. Once registered, users can log in securely using their credentials.<br>
 
