@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
-from notes.models import Note
+from notes.models import Note, NoteSharingInvitation
 
 User = get_user_model()
 
@@ -43,3 +43,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ('id', 'title', 'content', 'user')
+
+
+class NoteSharingInvitationSerializer(serializers.Serializer):
+    users = serializers.ListField(child=serializers.CharField( max_length=100), write_only=True, required=False)
