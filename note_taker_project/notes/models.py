@@ -28,6 +28,15 @@ class Category(models.Model):
         return self.name
 
 
+class NoteSharingInvitation(models.Model):
+    note = models.ForeignKey('Note', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Invitation for Note {self.note} to {self.recipient}"
+
+
 class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
