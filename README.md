@@ -5,7 +5,7 @@ NoteTaker is a web-based Note-taking application built using Django Rest Framewo
 We welcome contributions to enhance and improve our project! If you would like to contribute, please follow these guidelines:
 
 ### Issues
-If you encounter any issues or bugs with the project, please feel free to open an issue on our [GitHub repository](link-to-repo-issues). When opening an issue, please include as many details as possible, including steps to reproduce the issue and the expected behavior.
+If you encounter any issues or bugs with the project, please feel free to open an issue on our [GitHub repository](https://github.com/Ravikalakoti/NoteTaker---A-JWT-Authentication-Note-taking-App/issues). When opening an issue, please include as many details as possible, including steps to reproduce the issue and the expected behavior.
 
 ### Feature Requests
 If you have a feature request or an idea to improve the project, please open an issue on our [GitHub repository](link-to-repo-issues) with the "Feature Request" label. Describe the feature you would like to see and how it would benefit the project.
