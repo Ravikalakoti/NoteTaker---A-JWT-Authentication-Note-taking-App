@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from notes.views import UserRegistrationView, TokenObtainPairView, TokenRefreshViewCustom, NoteListView, NoteDetailView
+from notes.views import (
+    UserRegistrationView, TokenObtainPairView, TokenRefreshViewCustom,
+    NoteListView, NoteDetailView, NoteSearchView
+)
 from rest_framework.documentation import include_docs_urls
 
 
@@ -27,4 +30,5 @@ urlpatterns = [
     path('api/register/', UserRegistrationView.as_view(), name='user_registration'),
     path('api/notes/', NoteListView.as_view(), name='note-list'),
     path('api/notes/<int:pk>/', NoteDetailView.as_view(), name='note-detail'),
+    path('api/search/', NoteSearchView.as_view(), name='note_search'),
 ]
