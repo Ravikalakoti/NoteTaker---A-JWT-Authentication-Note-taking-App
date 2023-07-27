@@ -30,6 +30,9 @@ We expect all contributors to follow our [Code of Conduct](link-to-code-of-condu
 
 If you need any assistance or have questions about contributing, feel free to reach out to us through [email/contact details](mailto:ravikalakoti16@gmail.com) or open an issue on our [GitHub repository](https://github.com/Ravikalakoti/NoteTaker---A-JWT-Authentication-Note-taking-App/issues).
 
+Contributors:
+- Your Name (@your-github-username)
+
 Thank you for your interest in contributing to our project!
 # Check Api Docs by http://localhost:8000/docs/
 
