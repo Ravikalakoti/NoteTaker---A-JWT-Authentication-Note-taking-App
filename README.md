@@ -17,7 +17,7 @@ If you want to contribute code changes or bug fixes, you can do so by creating a
 2. Create a new branch from the `main` branch for your changes.
 3. Make your changes and commit them with descriptive commit messages.
 4. Push your branch to your forked repository.
-5. Open a pull request on our [GitHub repository](link-to-repo-pulls) from your branch to our `main` branch.
+5. Open a pull request on our [GitHub repository](https://github.com/Ravikalakoti/NoteTaker---A-JWT-Authentication-Note-taking-App/pulls) from your branch to our `main` branch.
 6. Your pull request will be reviewed, and any necessary feedback will be provided.
 
 Please ensure your code follows our coding style and includes appropriate tests.
