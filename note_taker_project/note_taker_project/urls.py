@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from notes.views import UserRegistrationView, TokenObtainPairView, TokenRefreshViewCustom, NoteListView, NoteDetailView
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshViewCustom.as_view(), name='token_refresh'),
+    path('api/register/', UserRegistrationView.as_view(), name='user_registration'),
+    path('api/notes/', NoteListView.as_view(), name='note-list'),
+    path('api/notes/<int:pk>/', NoteDetailView.as_view(), name='note-detail'),
 ]
