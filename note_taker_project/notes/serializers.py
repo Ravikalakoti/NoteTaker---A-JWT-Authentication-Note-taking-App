@@ -10,7 +10,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'password')
+        fields = ('username', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -26,7 +26,7 @@ class TokenObtainPairSerializer(serializers.Serializer):
         email = data.get('email')
         password = data.get('password')
 
-        user = User.objects.filter(email=email).first()
+        user = User.objects.filter(username=email).first()
 
         if user and user.check_password(password):
             refresh = RefreshToken.for_user(user)
@@ -39,6 +39,7 @@ class TokenObtainPairSerializer(serializers.Serializer):
 
 
 class NoteSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = Note
         fields = ('id', 'title', 'content', 'user')

@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from notes.views import UserRegistrationView, TokenObtainPairView, TokenRefreshViewCustom, NoteListView, NoteDetailView
+from rest_framework.documentation import include_docs_urls
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('docs/', include_docs_urls(title='Notes API', permission_classes=[]), name='docs'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshViewCustom.as_view(), name='token_refresh'),
     path('api/register/', UserRegistrationView.as_view(), name='user_registration'),
