@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from .models import Note
 from .serializers import NoteSerializer
 from rest_framework import generics, permissions
+from django.db.models import Q
 
 
 class UserRegistrationView(generics.CreateAPIView):
@@ -36,8 +37,21 @@ class NoteListView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+
+class NoteSearchView(generics.ListAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        search_query = self.request.query_params.get('q', None)
+        if search_query:
+            return Note.objects.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query), user=self.request.user)
+        else:
+            return Note.objects.none()
 
