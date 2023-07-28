@@ -39,7 +39,7 @@ class NoteListView(generics.ListCreateAPIView):
         user = self.request.user
         # Get notes that belong to the authenticated user or are shared with the user
         shared_notes = NoteSharingInvitation.objects.filter(recipient=user).values_list('note__id', flat=True)
-        queryset = Note.objects.filter(Q(user=user) | Q(id__in=shared_notes))
+        queryset = Note.objects.filter(Q(user=user) |Q(id__in=shared_notes))
         return queryset
 
     def perform_create(self, serializer):
@@ -53,19 +53,19 @@ class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class NoteSearchView(generics.ListAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+	serializer_class = NoteSerializer
+	permission_classes = (permissions.IsAuthenticated,)
 
-    def get_queryset(self):
-        search_query = self.request.query_params.get('q', None)
-        if search_query:
+	def get_queryset(self):
+		search_query = self.request.query_params.get('q', None)
+		if search_query:
 			return Note.objects.filter(
 				Q(title__icontains=search_query) |
 				Q(content__icontains=search_query),
 				user=self.request.user
 			)
-        else:
-            return Note.objects.none()
+		else:
+			return Note.objects.none()
 
 
 class ShareNoteWithUsersView(generics.CreateAPIView):
