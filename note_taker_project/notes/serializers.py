@@ -42,10 +42,19 @@ class TokenObtainPairSerializer(serializers.Serializer):
 
 class NoteSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    likes = serializers.SerializerMethodField()
+
     class Meta:
         model = Note
-        fields = ('id', 'title', 'content', 'user')
+        fields = ('id', 'title', 'content', 'user', 'likes')
+
+    def get_likes(self, obj):
+        return obj.likes.count()
 
 
 class NoteSharingInvitationSerializer(serializers.Serializer):
     users = serializers.ListField(child=serializers.CharField( max_length=100), write_only=True, required=False)
+
+
+class NoteLikeSerializer(serializers.Serializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())

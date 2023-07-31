@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from notes.views import (
     UserRegistrationView, TokenObtainPairView, TokenRefreshViewCustom,
-    NoteListView, NoteDetailView, NoteSearchView, ShareNoteWithUsersView
+    NoteListView, NoteDetailView, NoteSearchView, ShareNoteWithUsersView,
+    LikeNoteView
 )
 from rest_framework.documentation import include_docs_urls
 
@@ -32,4 +33,5 @@ urlpatterns = [
     path('api/notes/<int:pk>/', NoteDetailView.as_view(), name='note-detail'),
     path('api/search/', NoteSearchView.as_view(), name='note_search'),
     path('api/notes/<int:pk>/share/', ShareNoteWithUsersView.as_view(), name='share_note_with_users'),
+    path('note/<int:note_id>/like/', LikeNoteView.as_view()),
 ]
