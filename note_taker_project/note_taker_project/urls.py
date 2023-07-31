@@ -18,7 +18,7 @@ from django.urls import path
 from notes.views import (
     UserRegistrationView, TokenObtainPairView, TokenRefreshViewCustom,
     NoteListView, NoteDetailView, NoteSearchView, ShareNoteWithUsersView,
-    LikeNoteView
+    LikeNoteView, FollowUnfollowUserView, FollowersFollowingListView
 )
 from rest_framework.documentation import include_docs_urls
 
@@ -34,4 +34,6 @@ urlpatterns = [
     path('api/search/', NoteSearchView.as_view(), name='note_search'),
     path('api/notes/<int:pk>/share/', ShareNoteWithUsersView.as_view(), name='share_note_with_users'),
     path('note/<int:note_id>/like/', LikeNoteView.as_view()),
+    path('api/users/<int:user_id>/follow/', FollowUnfollowUserView.as_view(), name='follow_unfollow_user'),
+    path('api/users/<str:relation_type>/', FollowersFollowingListView.as_view(), name='user_followers_following')
 ]

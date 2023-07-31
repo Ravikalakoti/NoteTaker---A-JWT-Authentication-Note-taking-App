@@ -2,9 +2,12 @@
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .serializers import UserSerializer, TokenObtainPairSerializer, NoteSharingInvitationSerializer, NoteLikeSerializer
+from .serializers import (
+    UserSerializer, TokenObtainPairSerializer, NoteSharingInvitationSerializer,
+    NoteLikeSerializer
+)
 from rest_framework_simplejwt.views import TokenRefreshView
-from .models import Note, NoteSharingInvitation
+from .models import Note, NoteSharingInvitation, UserRelationship
 from .serializers import NoteSerializer
 from rest_framework import generics, permissions
 from django.db.models import Q
@@ -111,4 +114,105 @@ class LikeNoteView(generics.CreateAPIView):
         note.save()
 
         return Response({"message": "Note liked successfully."}, status=200)
+
+
+class FollowUnfollowUserView(generics.CreateAPIView, generics.DestroyAPIView):
+    queryset = UserRelationship.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_serializer_class(self):
+        return None
+
+    def get_serializer(self, *args, **kwargs):
+        return None
+
+    def create(self, request, *args, **kwargs):
+        following_user_id = kwargs.get('user_id')
+        try:
+            following_user = User.objects.get(pk=following_user_id)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User to follow does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        follower_user = request.user
+
+        if follower_user == following_user:
+            return Response(
+                {"error": "You cannot follow yourself."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if UserRelationship.objects.filter(
+            follower=follower_user,
+            following=following_user
+        ).exists():
+            return Response(
+                {"error": "You are already following this user."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        relationship = UserRelationship(follower=follower_user, following=following_user)
+        relationship.save()
+
+        return Response({"message": "You are now following this user."}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, *args, **kwargs):
+        following_user_id = kwargs.get('user_id')
+        try:
+            following_user = User.objects.get(pk=following_user_id)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User to unfollow does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        follower_user = request.user
+
+        if UserRelationship.objects.filter(
+            follower=follower_user,
+            following=following_user
+        ).exists():
+            relationship = UserRelationship.objects.get(
+                follower=follower_user,
+                following=following_user
+            )
+            relationship.delete()
+            return Response(
+                {"message": "You have unfollowed this user."},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"error": "You are not following this user."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class FollowersFollowingListView(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        relation_type = self.kwargs['relation_type']
+        request_user = self.request.user
+
+        if relation_type == 'followers':
+            # Get the list of users who are following the request_user
+            return User.objects.filter(following__following=request_user)
+        elif relation_type == 'following':
+            # Get the list of users whom the request_user is following
+            return User.objects.filter(followers__follower=request_user)
+
+    def list(self, request, *args, **kwargs):
+        relation_type = self.kwargs['relation_type']
+
+        if relation_type not in ('followers', 'following'):
+            return Response({"error": "Invalid relation type."}, status=400)
+
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+
+        return Response(serializer.data)
 
