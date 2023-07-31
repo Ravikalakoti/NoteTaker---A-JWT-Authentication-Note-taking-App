@@ -2,7 +2,7 @@
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .serializers import UserSerializer, TokenObtainPairSerializer, NoteSharingInvitationSerializer
+from .serializers import UserSerializer, TokenObtainPairSerializer, NoteSharingInvitationSerializer, NoteLikeSerializer
 from rest_framework_simplejwt.views import TokenRefreshView
 from .models import Note, NoteSharingInvitation
 from .serializers import NoteSerializer
@@ -87,4 +87,28 @@ class ShareNoteWithUsersView(generics.CreateAPIView):
             invitation.save()
 
         return Response({"message": "Note share successfully"}, status=201)
+
+
+class LikeNoteView(generics.CreateAPIView):
+    queryset = Note.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = NoteLikeSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            note = Note.objects.get(pk=kwargs['note_id'])
+        except Note.DoesNotExist:
+            return Response({"error": "Note does not exist."}, status=404)
+
+        user = request.user
+        if user in note.collaborators.all():
+            return Response({"error": "Collaborators cannot like the note."}, status=400)
+
+        if user in note.likes.all():
+            return Response({"message": "You have already liked this note."}, status=400)
+
+        note.likes.add(user)
+        note.save()
+
+        return Response({"message": "Note liked successfully."}, status=200)
 
