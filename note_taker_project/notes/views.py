@@ -7,7 +7,7 @@ from .serializers import (
     NoteLikeSerializer
 )
 from rest_framework_simplejwt.views import TokenRefreshView
-from .models import Note, NoteSharingInvitation, UserRelationship
+from .models import Note, NoteSharingInvitation, UserRelationship, ActivityLog
 from .serializers import NoteSerializer
 from rest_framework import generics, permissions
 from django.db.models import Q
@@ -46,13 +46,18 @@ class NoteListView(generics.ListCreateAPIView):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        note = serializer.save(user=self.request.user)
+        ActivityLog.objects.create(user=self.request.user, note=note, action='CREATED')
 
 
 class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_update(self, serializer):
+        note = serializer.save()
+        ActivityLog.objects.create(user=self.request.user, note=note, action='MODIFIED')
 
 
 class NoteSearchView(generics.ListAPIView):
