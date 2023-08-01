@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
-from notes.models import Note, NoteSharingInvitation, UserRelationship
+from notes.models import Note, NoteSharingInvitation, UserRelationship, ActivityLog
 
 User = get_user_model()
 
@@ -58,3 +58,9 @@ class NoteSharingInvitationSerializer(serializers.Serializer):
 
 class NoteLikeSerializer(serializers.Serializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+
+class ActivityLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityLog
+        fields = '__all__'

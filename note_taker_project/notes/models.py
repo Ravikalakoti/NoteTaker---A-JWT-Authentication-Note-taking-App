@@ -61,3 +61,19 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ActivityLog(models.Model):
+    ACTION_CHOICES = (
+        ('CREATED', 'Created'),
+        ('MODIFIED', 'Modified'),
+        ('SHARED', 'Shared'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    action = models.CharField(max_length=10, choices=ACTION_CHOICES)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.get_action_display()} - {self.user.username} - {self.note.title}"
